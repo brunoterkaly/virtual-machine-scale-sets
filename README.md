@@ -199,9 +199,9 @@ Finally, we get to the core section where we specify that we want to use the VM 
 
 On line 194 you will notice that there is a dependency on the underlying storage accounts, because the underlying VHD file for each of the VM's needs a storage account.
 
-If you read the detailed sections of this particular resource, you will note that it leverages some of the previous other resources, such as the operating system, the networking profile, the load balancer.
+If you read the detailed sections of this particular resource, you will note that it leverages some of the previously defined resources, such as the operating system, the networking profile, the load balancer, etc.
 
-Finally, towards the end, as you can see in the json below, taking into some diagnostic information so we can track the performance of firm virtual machine scale sets. 
+Finally, towards the end, as you can see in the json below, we are defining some diagnostic resources so we can track the performance of our virtual machine scale sets. 
 
 ````json
 "extensionProfile": {
