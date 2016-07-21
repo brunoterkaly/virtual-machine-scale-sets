@@ -134,7 +134,6 @@ _Figure 10:  Specifying network information_
 
 Storage accounts are needed because the underlying disk image that is hosting the operating system will need to be tied to a storage account. You will see this referenced later by the VM scale set itself.
 
-
 ![](./images/image0025.jpg)
 
 _Figure 11:  Defining the storage accounts_
@@ -143,21 +142,15 @@ _Figure 11:  Defining the storage accounts_
 
 Public IP addresses are necessary because they provide the load balanced entry point for the virtual machines in the scale set. The public IP address will route traffic to the appropriate virtual machines in the scale set.
 
-
 _Figure 12:  Public IP Address_
 
-
 This is where you define the metrics that determine when you're scale set will scale up or scale down. There are a variety of metrics that you can use to do this. In the next section, **rules** defines which metrics will be used for scaling up scaling down.
-
-
 
 ![](./images/image0037.jpg)
 
 _Figure 13:  Autoscale Settings_
 
-
 Here between lines 311 and 320 you can see that the percent processor time is being used to scale up or scale down. Most of the time window indicates for five minutes if more than 60% of the processor capability is used, a scale up of that will be triggered. On lines 323 two 326, you can notice that we will scale up one VM if the percent processor time threshold is reached. An on line 322 through 326, you will note that we scale up for just one VM
-
 
 ![](./images/image0040.jpg)
 
@@ -165,9 +158,6 @@ _Figure 14:  Percent processor time as a scaling metric_
 
 .
 We also need to define one we scale back down. notice that the percent processor time dips below 30% for five minutes or more, we will scale down.
-
-
-
 
 ![](./images/image0043.jpg)
 
@@ -187,17 +177,13 @@ So what this means is that if you SSH into port 50,000, you will reach the first
 
 Consecutive ports on the load balancer map to consecutive VM's in the scale set. He
 
-
 ![](./images/loadbalancer.png)
 
 _Figure 16:  Understanding the load balancer and the routing into scale sets_
 
-
-
 Finally, we get to the core section where we specify that we want to use the VM scale sets.
 
 On line 194 you will notice that there is a dependency on the underlying storage accounts, because the underlying VHD file for each of the VM's needs a storage account.
-
 
 If you read the detailed sections of this particular resource, you will note that it leverages some of the previous other resources, such as the operating system, the networking profile, the load balancer.
 
@@ -228,11 +214,9 @@ Finally, towards the end, as you can see in the json below, taking into some dia
 }
 ````
 
-
 ![](./images/scalesetsresource.png)
 
 _Figure 17:  Defining the virtual machine scale sets_
-
 
 ## Using the command line to provision our virtual machine scale set
 
@@ -240,8 +224,7 @@ Before diving into the command line. Let's finish off working with the azuredepl
 
 ![](./images/image0046.jpg)
 
-_Figure 15:  Customizing the deployment_
-
+_Figure 18:  Customizing the deployment_
 
 Now we are ready to issue the command to provision that virtual machine scale sets using the Azure cross-platform tooling.
 
@@ -251,8 +234,7 @@ azure group create "vmss-rg" "West US" -f azuredeploy.json -d "vmss-deploy" -e a
 
 ![](./images/image0049.jpg)
 
-_Figure 15:  Executing the deployment_
+_Figure 19:  Executing the deployment_
 
 ...to be continued...
-
 
