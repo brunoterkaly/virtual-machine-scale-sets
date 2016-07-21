@@ -32,17 +32,17 @@ $ azure group create "vmss-rg" "West US" -f azuredeploy.json -d "vmss-deploy" -e
 ````
 
 - **azure group create** 
-	- Is the fundamental command that builds out your infrastructure
+    - Is the fundamental command that builds out your infrastructure
 - **vmss-rg** 
-	- Is the name of your resource group, which is a conceptual container for all the infrastructure you deploy (VMs, Storage, Networking). If you delete a resource group, you delete all the resources inside of it.
+    - Is the name of your resource group, which is a conceptual container for all the infrastructure you deploy (VMs, Storage, Networking). If you delete a resource group, you delete all the resources inside of it.
 - **WestUS** 
-	- Is a data center where your deployment will take place
+    - Is a data center where your deployment will take place
 - **vmss-deploy** 
-	- Is the name of the deployment (so you can refer back to it later)
+    - Is the name of the deployment (so you can refer back to it later)
 - **azuredeploy.json** 
-	- Is where you define the infrastructure you want to deploy
+    - Is where you define the infrastructure you want to deploy
 - **azuredeploy.parameters.json** 
-	- Allows you to specify which values you can input when deploying the resources. These parameter values enable you to customize the deployment by providing values that are tailored for a particular scenario, like the number of VMs you want in your scale set
+    - Allows you to specify which values you can input when deploying the resources. These parameter values enable you to customize the deployment by providing values that are tailored for a particular scenario, like the number of VMs you want in your scale set
 
 The Azure Cross Platform tooling can be downloaded here:
 
@@ -111,8 +111,6 @@ See this link: https://azure.microsoft.com/en-us/documentation/articles/virtual-
 - G-series
 - GS-series
 
-
-
 ![](./images/image0013.jpg)
 
 _Figure 7:  Choosing the VM size_
@@ -161,7 +159,6 @@ Public IP addresses are necessary because they provide the load balanced entry p
 
 _Figure 12:  Public IP Address_
 
-
 This is where you define the metrics that determine when you're scale set will scale up or scale down. There are a variety of metrics that you can use to do this. In the next section, **rules** defines which metrics will be used for scaling up scaling down.
 
 ![](./images/image0037.jpg)
@@ -174,8 +171,7 @@ Here between lines 311 and 320 you can see that the percent processor time is be
 
 _Figure 14:  Percent processor time as a scaling metric_
 
-.
-We also need to define one we scale back down. notice that the percent processor time dips below 30% for five minutes or more, we will scale down.
+We also need to define how we scale back down. Notice that if the percent processor time dips below 30% for five minutes or more, we will scale down.
 
 ![](./images/image0043.jpg)
 
@@ -193,7 +189,7 @@ So what this means is that if you SSH into port 50,000, you will reach the first
 "natBackendPort": 22,
 ````
 
-Consecutive ports on the load balancer map to consecutive VM's in the scale set. He
+Consecutive ports on the load balancer map to consecutive VM's in the scale set. 
 
 ![](./images/loadbalancer.png)
 
@@ -255,4 +251,3 @@ azure group create "vmss-rg" "West US" -f azuredeploy.json -d "vmss-deploy" -e a
 _Figure 19:  Executing the deployment_
 
 ...to be continued...
-
