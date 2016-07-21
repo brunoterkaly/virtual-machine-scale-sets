@@ -92,9 +92,26 @@ _Figure 6:  Viewing the auto scale set example_
 
 ## Viewing the Sample Template
 
-So we will start exploring **azuredeploy.json**. This talk about the first section, the parameter section, which as explained earlier, allows us to passing values to customize deployment, such as indicating the number of BMs we want in our scale set.
+So we will start exploring **azuredeploy.json**. In the first section, the parameter section, which was explained earlier, allows us to pass values to customize a deployment.
+
+We may want to pass in different numbers of VMs per Scale Set.
 
 In the figure below you will note that the first parameter is vmSku, and that simply represent the type of hardware we want to use. We are choosing Standard_A1, because that's a simple single core VM.
+
+See this link: https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-windows-sizes/
+
+- A-series
+- A-series - compute-intensive instances
+- D-series
+- Dv2-series
+- DS-series*
+- DSv2-series*
+- F-series
+- Fs-series*
+- G-series
+- GS-series
+
+
 
 ![](./images/image0013.jpg)
 
