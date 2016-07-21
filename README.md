@@ -155,11 +155,12 @@ Storage accounts are needed because the underlying disk image that is hosting th
 
 _Figure 11:  Defining the storage accounts_
 
-![](./images/image0028.jpg)
-
 Public IP addresses are necessary because they provide the load balanced entry point for the virtual machines in the scale set. The public IP address will route traffic to the appropriate virtual machines in the scale set.
 
+![](./images/image0028.jpg)
+
 _Figure 12:  Public IP Address_
+
 
 This is where you define the metrics that determine when you're scale set will scale up or scale down. There are a variety of metrics that you can use to do this. In the next section, **rules** defines which metrics will be used for scaling up scaling down.
 
