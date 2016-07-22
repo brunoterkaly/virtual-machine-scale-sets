@@ -286,6 +286,48 @@ What we want to do now is stressed the system and force CPU utilization to rise 
 
 There is utility called **stress** that makes this easy.
 
+So we will use the command below to remote and so that we can install this utility.
+
+
+````bash
+ssh -p 50000 vmssadmin@23.101.193.32
+````
+
+Notice we are remoting into one of the nodes in the scale set.
+
+
+![](./images/image0067.jpg)
+
+_Figure 101:  Remoting in_
+
+
+Let's install the **stress** utility.
+
+
+![](./images/image0070.jpg)
+
+_Figure 102:  Install the stress utility_
+
+
+Let's put some load on the system so that we can verify that scaling will take place.
+
+
+![](./images/image0073.jpg)
+
+_Figure 103:  Running the stress utility_
+
+
+The top utility allows us to validate that CPU utilization is above 60%, which is the threshold we defined for scale up events.
+
+![](./images/image0076.jpg)
+
+_Figure 104:  Verifying we have adequate CPU utilization_
+
+
+
+
+
+
 To install stress execute the command line below:
 
 ````bash
@@ -294,14 +336,12 @@ apt-get installs stress
 
 Once you do so, you can type in **stress** to see it's available parameters.
 
-![](./images/image0058.jpg)
 
-_Figure 21:  The stress command_
 
 To make sure we go over five minutes we will set a timeout limit of 400 seconds.
 
 ````bash
- stress --cpu 8 --io 4 -c 12 --vm 2 --vm-bytes 128M --timeout 400s
+ stress --cpu 8 --io 4 -c 12 --vm 2 --vm-bytes 128M --timeout 800s
 ````
 
 A second console window can be used to view this CP utilization using a command called **top**.
@@ -312,9 +352,6 @@ top
 
 Here you can see that that the CPU utilization is extremely low.
 
-![](./images/image0061.jpg)
-
-_Figure 104:  Output of top_
 
 
 #### let's now stress one of the VM's and the scale set
@@ -322,12 +359,10 @@ _Figure 104:  Output of top_
 As described before, this is the command that will do that.
 
 ````bash
- stress --cpu 8 --io 4 -c 12 --vm 2 --vm-bytes 128M --timeout 400s
+ stress --cpu 8 --io 4 -c 12 --vm 2 --vm-bytes 128M --timeout 800s
 ````
 
-![](./images/image0064.jpg)
 
-_Figure 104:  Maxing out the CPU to trigger a scale event_
 
 
 
@@ -335,3 +370,6 @@ _Figure 104:  Maxing out the CPU to trigger a scale event_
 ## Conclusion
 
 This brief walk-through has taken you from beginning to and, allowing you to see how a scale set is constructed, how to set up some metrics to trigger scale up and scaled-down events. In addition, we leverage some tooling to actually see this take place.
+
+
+ssh -p 50000 vmssadmin@23.101.193.32
