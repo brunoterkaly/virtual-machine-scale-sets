@@ -236,6 +236,14 @@ _Figure 17:  Defining the virtual machine scale sets_
 
 Before diving into the command line. Let's finish off working with the azuredeploy.parameters.json file, which is where we customize or parameterize the deployment.
 
+This is the file that is used to pass in parameters, such as the:
+
+- **vmSku**
+- **ubuntuOSVersion**
+- **vmssName**
+- **instanceCount** (how many VM's to include in the scale set initially)
+- etc
+
 ![](./images/image0046.jpg)
 
 _Figure 18:  Customizing the deployment_
@@ -246,8 +254,84 @@ Now we are ready to issue the command to provision that virtual machine scale se
 azure group create "vmss-rg" "West US" -f azuredeploy.json -d "vmss-deploy" -e azuredeploy.parameters.json
 ````
 
+Note below that we are executing the **azure group create** command. It passed the preflight validation because we don't see any failure yet.
+
 ![](./images/image0049.jpg)
 
 _Figure 19:  Executing the deployment_
 
-...to be continued...
+
+Notice the things that we walk through previously within the template have now been made reality:
+
+- Virtual machine scale set
+- Load balancer
+- Public IP address
+- Various storage accounts
+
+![](./images/image0052.jpg)
+
+_Figure 20: The infrastructure that was deployed_
+
+If we drill down to the details of the scale set, you will notice that currently it plumbs to the **instance count **that was passed in. As you recall, the **instance count** was 3in the parameters file.
+
+![](./images/image0055.jpg)
+
+_Figure 21:  Details of the VM scale set_
+
+## Verifying that auto scaling is functioning
+
+What we want to do now is stressed the system and force CPU utilization to rise above 60% for more than five minutes, so that we can see the scaling up of our VM's.
+
+#### Stress
+
+There is utility called **stress** that makes this easy.
+
+To install stress execute the command line below:
+
+````bash
+apt-get installs stress
+````
+
+Once you do so, you can type in **stress** to see it's available parameters.
+
+![](./images/image0058.jpg)
+
+_Figure 21:  The stress command_
+
+To make sure we go over five minutes we will set a timeout limit of 400 seconds.
+
+````bash
+ stress --cpu 8 --io 4 -c 12 --vm 2 --vm-bytes 128M --timeout 400s
+````
+
+A second console window can be used to view this CP utilization using a command called **top**.
+
+````bash
+top
+````
+
+Here you can see that that the CPU utilization is extremely low.
+
+![](./images/image0061.jpg)
+
+_Figure 104:  Output of top_
+
+
+#### let's now stress one of the VM's and the scale set
+
+As described before, this is the command that will do that.
+
+````bash
+ stress --cpu 8 --io 4 -c 12 --vm 2 --vm-bytes 128M --timeout 400s
+````
+
+![](./images/image0064.jpg)
+
+_Figure 104:  Maxing out the CPU to trigger a scale event_
+
+
+
+
+## Conclusion
+
+This brief walk-through has taken you from beginning to and, allowing you to see how a scale set is constructed, how to set up some metrics to trigger scale up and scaled-down events. In addition, we leverage some tooling to actually see this take place.
