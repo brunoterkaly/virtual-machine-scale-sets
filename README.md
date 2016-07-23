@@ -378,5 +378,5 @@ _Figure 28:  the moment we have been waiting for_
 
 ## Conclusion
 
-This brief walk-through has taken you from beginning to and, allowing you to see how a scale set is constructed, how to set up some metrics to trigger scale up and scaled-down events. this post took you through a detailed walk-through all the way to the point of validating that skill sets work and that additional VM's can be brought online in the event of high CPU utilization across the cluster.
+This brief walk-through has taken you from beginning to end, allowing you to see how a scale set is constructed, how to set up some metrics to trigger scale up and scale-down events. This post took you through a detailed walk-through all the way to the point of validating that scale sets work and that additional VM's can be brought online in the event of high CPU utilization across the cluster.
 
