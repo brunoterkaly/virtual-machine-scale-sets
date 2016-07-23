@@ -1,13 +1,24 @@
 # Virtual Machine Scale Sets - Protecting your application's performance
 
-Azure scale sets serve as the foundation for auto scaling your virtual machine infrastructure and based on performance indicators, such as CPU utilization and more. 
+Azure **Virtual Machines Scale Sets** serve as the foundation for your auto scaling capabilities. The architecture of virtual machine scale sets greatly simplifies the ability to run a cluster that can adjust either by scaling out or by scaling up.
+
+The real beauty comes in because you can set up thresholds for such things as CPU utilization across the cluster, paving the way For Azure to automatically monitor and respond to thresholds for a variety of performance metrics, not the least of which is percent CPU utilization.
+
+In this post we will demonstrate **automatically scaling up when the overall cluster percent CPU utilization stays above 60% more than five minutes.**
+
 
 The purpose of this walk-through is to illustrate the following:
 
 - How to provision Azure scale sets using the Azure Resource Manager Template mechanism
-- How to construct or leverage an existing json-formatted template that provides the underlying scale set functionality
+
+- How to work with the json-formatted template file, the place that we set up our VM types. The operating system. The number of cores. The amount of memory. Load balancer rules, public IP addresses, storage accounts, and more. 
+- 
+- an existing json-formatted template that provides the underlying scale set functionality
+
 - How to use Azure commandline utilities as well as an Azure resource manager template to provision virtual machines that can leverage Azure scale sets
+
 - A deep dive on instance count, storage account, virtual networks, public IP addressing, load balancers, and Azure scale sets, as well as the relationship among these different components
+
 - A demonstration of how auto scaling kicks in to provision additional virtual machines in the deployment
 
 ## Provisioning Infrastructure in Azure
@@ -22,7 +33,7 @@ _Figure 1:  Using the cross-platform tooling to deploy infrastructure_
 
 #### Azure Group Create
 
-Notice in the figure below there is a red box around what appears to be a command. This command is the Azure command line tool.
+Notice in the figure below there is a red box around what appears to be a command. This command ("azure") is the Azure command line tool. It accepts a number of parameters.
 
 Here are some things to realize about the command you see there:
 
