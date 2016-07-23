@@ -260,7 +260,6 @@ Note below that we are executing the **azure group create** command. It passed t
 
 _Figure 19:  Executing the deployment_
 
-
 Notice the things that we walk through previously within the template have now been made reality:
 
 - Virtual machine scale set
@@ -288,46 +287,96 @@ There is utility called **stress** that makes this easy.
 
 So we will use the command below to remote and so that we can install this utility.
 
+Because we will need to stress the tool on each individual VM, we will remote into each of our three VM's that are in the scale set.
+
+There was a little voodoo pick in the right port. For some reason 50001 was not a valid host. So I skipped to 50003 and it seemed to work.
+
+Once remote did in the next step is to go in and run the stress tool. Remember when you talk about percent CPU utilization you are talking about the average of all the nodes in your cluster, not anyone machine. This makes sense, of course.
 
 ![](./images/image0079.jpg)
 
-_Figure 100:  x_
+_Figure 22:  Remoting in and using the appropriate number_
 
-![](./images/image0082.jpg)
+Well, it turns out that **stress** is not available by default in **Ubuntu**.
 
-_Figure 100:  x_
+So let's install the stress utility.
 
-![](./images/image0085.jpg)
+###Stressing the VMs in the scale set
 
-_Figure 101:  x_
+- **Step 1 -** SSH into each of the three VM's and the scale set
+- **Step 2 -** Install stress
+- **Step 3 -** Run stress
+- **Step 4 -** Run top
 
-![](./images/image0088.jpg)
+This next section will discuss or explain the upcoming images that follow this narrative.
 
-_Figure 102:  x_
+#### Step 1 of 4 - SSH into each of the three VM's and the scale set
 
-![](./images/image0091.jpg)
+We will need to be logged into each of the VM's and the scale set so that we could install stress and run it.
 
-_Figure 103:  x_
+#### Step 2 of 4 - Install stress
 
-![](./images/image0094.jpg)
+Stress is the utility that will max out your CPU so that you can trigger a scale event.
 
-_Figure 104:  x_
+````bash
+sudo apt-get install stress
+````
 
+#### Step 3 of 4 - Run stress
 
-
+We will run it as follows with the following parameters:
 
 ````bash
 stress --cpu 8 --io 4 -c 12 --vm 2 --vm-bytes 128M --timeout 800s &
 ````
 
+#### Step 4 of 4 - Run top
 
+Top gives us a nice depiction of CPU utilization so we can verify that it is high enough to trigger a scale event.
 
+````bash
+top
+````
 
+![](./images/image0082.jpg)
 
+_Figure 23:  We are SSH'd into each of the VM's and the scale set_
+
+![](./images/image0085.jpg)
+
+_Figure 24:  Installing Stress (sounds funny)_
+
+![](./images/image0088.jpg)
+
+_Figure 25:  Remember to install it on all of the VM's and the scale set_
+
+![](./images/image0091.jpg)
+
+_Figure 26:  Verifying %CPU Utilization_
+
+**Some key points.**
+
+- Scale out is based on average CPU across the scale set. 
+- You can scale up too (More CPU, Memory, Storage)
+- The whole cycle can take 20 minutes for all the magic to happen (VMs provisioned, de-provisioned, etc)
+- Insights pipeline needs to be initiated (e.g. create storage account, start sending data, initialize Insights engine etc.)
+- After the first scale event, you can expect scale events to take 5-10 minutes depending on timing (5 minute sampling plus time to start VM etc)
+
+![](./images/image0094.jpg)
+
+_Figure 27:  Make sure you wait_
+
+## Success - VMs in scale set provisioned
+
+This is actually exactly what we were looking for. Notice that two additional VM's got brought online to accommodate and compensate for the massive spike in CPU utilization. If you think about it, three virtual machines running at 80% utilization need to be at 40% minimum, given the sudden and massive spike. So the question becomes what number of additional VM's are needed to bring down the CPU to a reasonable level. I like that Azure brought 2 VM's online, not just one. Feels like a safer but prudent reaction to CPU spikes.
+`
+I will conclude this post right here but there is more to talk about. I encourage everybody to go simply do some searching around the web for guidance around Azure scale sets.
+
+![](./images/image0100.jpg)
+
+_Figure 28:  the moment we have been waiting for_
 
 ## Conclusion
 
-This brief walk-through has taken you from beginning to and, allowing you to see how a scale set is constructed, how to set up some metrics to trigger scale up and scaled-down events. In addition, we leverage some tooling to actually see this take place.
+This brief walk-through has taken you from beginning to and, allowing you to see how a scale set is constructed, how to set up some metrics to trigger scale up and scaled-down events. this post took you through a detailed walk-through all the way to the point of validating that skill sets work and that additional VM's can be brought online in the event of high CPU utilization across the cluster.
 
-
-ssh -p 50000 vmssadmin@23.101.193.32
