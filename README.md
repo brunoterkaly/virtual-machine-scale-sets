@@ -12,8 +12,6 @@ The purpose of this walk-through is to illustrate the following:
 - How to provision Azure scale sets using the Azure Resource Manager Template mechanism
 
 - How to work with the json-formatted template file, the place that we set up our VM types. The operating system. The number of cores. The amount of memory. Load balancer rules, public IP addresses, storage accounts, and more. 
-- 
-- an existing json-formatted template that provides the underlying scale set functionality
 
 - How to use Azure commandline utilities as well as an Azure resource manager template to provision virtual machines that can leverage Azure scale sets
 
