@@ -289,77 +289,35 @@ There is utility called **stress** that makes this easy.
 So we will use the command below to remote and so that we can install this utility.
 
 
-````bash
-ssh -p 50000 vmssadmin@23.101.193.32
-````
+![](./images/image0079.jpg)
 
-Notice we are remoting into one of the nodes in the scale set.
+_Figure 100:  x_
 
+![](./images/image0082.jpg)
 
-![](./images/image0067.jpg)
+_Figure 100:  x_
 
-_Figure 101:  Remoting in_
+![](./images/image0085.jpg)
 
+_Figure 101:  x_
 
-Let's install the **stress** utility.
+![](./images/image0088.jpg)
 
+_Figure 102:  x_
 
-![](./images/image0070.jpg)
+![](./images/image0091.jpg)
 
-_Figure 102:  Install the stress utility_
+_Figure 103:  x_
 
+![](./images/image0094.jpg)
 
-Let's put some load on the system so that we can verify that scaling will take place.
-
-
-![](./images/image0073.jpg)
-
-_Figure 103:  Running the stress utility_
-
-
-The top utility allows us to validate that CPU utilization is above 60%, which is the threshold we defined for scale up events.
-
-![](./images/image0076.jpg)
-
-_Figure 104:  Verifying we have adequate CPU utilization_
+_Figure 104:  x_
 
 
 
-
-
-
-To install stress execute the command line below:
 
 ````bash
-apt-get installs stress
-````
-
-Once you do so, you can type in **stress** to see it's available parameters.
-
-
-
-To make sure we go over five minutes we will set a timeout limit of 400 seconds.
-
-````bash
- stress --cpu 8 --io 4 -c 12 --vm 2 --vm-bytes 128M --timeout 800s
-````
-
-A second console window can be used to view this CP utilization using a command called **top**.
-
-````bash
-top
-````
-
-Here you can see that that the CPU utilization is extremely low.
-
-
-
-#### let's now stress one of the VM's and the scale set
-
-As described before, this is the command that will do that.
-
-````bash
- stress --cpu 8 --io 4 -c 12 --vm 2 --vm-bytes 128M --timeout 800s
+stress --cpu 8 --io 4 -c 12 --vm 2 --vm-bytes 128M --timeout 800s &
 ````
 
 
