@@ -6,18 +6,17 @@ The real beauty comes in because you can set up thresholds for such things as CP
 
 In this post we will demonstrate **automatically scaling up when the overall cluster percent CPU utilization stays above 60% more than five minutes.**
 
-
 The purpose of this walk-through is to illustrate the following:
 
-- How to provision Azure scale sets using the Azure Resource Manager Template mechanism
+- How to provision Azure scale sets using the Azure Resource Manager Template mechanism.
 
 - How to work with the json-formatted template file, the place that we set up our VM types. The operating system. The number of cores. The amount of memory. Load balancer rules, public IP addresses, storage accounts, and more. 
 
-- How to use Azure commandline utilities as well as an Azure resource manager template to provision virtual machines that can leverage Azure scale sets
+- How to use Azure commandline utilities as well as an Azure resource manager template to provision virtual machines that can leverage Azure scale sets.
 
-- A deep dive on instance count, storage account, virtual networks, public IP addressing, load balancers, and Azure scale sets, as well as the relationship among these different components
+- A deep dive on instance count, storage account, virtual networks, public IP addressing, load balancers, and Azure scale sets, as well as the relationship among these different components.
 
-- A demonstration of how auto scaling kicks in to provision additional virtual machines in the deployment
+- A demonstration of how auto scaling kicks in to provision additional virtual machines in the deployment.
 
 ## Provisioning Infrastructure in Azure
 
@@ -43,7 +42,7 @@ $ azure group create "vmss-rg" "West US" -f azuredeploy.json -d "vmss-deploy" -e
 - **azure group create** 
     - Is the fundamental command that builds out your infrastructure
 - **vmss-rg** 
-    - Is the name of your resource group, which is a conceptual container for all the infrastructure you deploy (VMs, Storage, Networking). If you delete a resource group, you delete all the resources inside of it.
+    - Is the name of your resource group, which is a conceptual container for all the infrastructure you deploy (VMs, Storage, Networking). If you delete a resource group, you delete all the resources inside of it
 - **WestUS** 
     - Is a data center where your deployment will take place
 - **vmss-deploy** 
@@ -130,7 +129,7 @@ This next section simply indicates the **operating system type** (Ubuntu in this
 
 _Figure 8:  Indicating the operating system_
 
-**vmSSName** represents the name that we will get to the VM scale set. This is the higher level of abstraction above naming individual VM's.
+**vmSSName** represents the name that we will get to the VM scale set. This is the higher level of abstraction above naming individual VMs.
 
 ![](./images/image0019.jpg)
 
@@ -148,7 +147,7 @@ We are going to skip over the **variables** section for now. instead, we will fo
 
 ## virtualNetworks
 
-The VM's inside of the scale set will need to have a networking address space. 
+The VMs inside of the scale set will need to have a networking address space. 
 
 Learn more here: https://azure.microsoft.com/en-us/documentation/articles/resource-groups-networking/
 
@@ -188,7 +187,7 @@ _Figure 15:  Scaling the cluster down_
 
 Load balancing is used to route traffic from the public Internet to the load balanced set of virtual machines.
 
-If you look closely on lines 181 and 182, you will notice that we define a front-end port range through which we can map to specific VM's. You will need to refer back to the resource file to really understand which specific numbers are being used. I have included an excerpt below.
+If you look closely on lines 181 and 182, you will notice that we define a front-end port range through which we can map to specific VMs. You will need to refer back to the resource file to really understand which specific numbers are being used. I have included an excerpt below.
 
 So what this means is that if you SSH into port 50,000, you will reach the first VM in the scale set. If you SSH into 50,001, you will reach the second VM scale set. And so on.
 
@@ -198,7 +197,7 @@ So what this means is that if you SSH into port 50,000, you will reach the first
 "natBackendPort": 22,
 ````
 
-Consecutive ports on the load balancer map to consecutive VM's in the scale set. 
+Consecutive ports on the load balancer map to consecutive VMs in the scale set. 
 
 ![](./images/loadbalancer.png)
 
@@ -206,7 +205,7 @@ _Figure 16:  Understanding the load balancer and the routing into scale sets_
 
 Finally, we get to the core section where we specify that we want to use the VM scale sets.
 
-On line 194 you will notice that there is a dependency on the underlying storage accounts, because the underlying VHD file for each of the VM's needs a storage account.
+On line 194 you will notice that there is a dependency on the underlying storage accounts, because the underlying VHD file for each of the VMs needs a storage account.
 
 If you read the detailed sections of this particular resource, you will note that it leverages some of the previously defined resources, such as the operating system, the networking profile, the load balancer, etc.
 
@@ -241,6 +240,17 @@ Finally, towards the end, as you can see in the json below, we are defining some
 
 _Figure 17:  Defining the virtual machine scale sets_
 
+#### Overprovisioning
+
+- Starting with the 2016-03-30 API version, VM Scale Sets will default to "overprovisioning" VMs. 
+- This means that the scale set will actually spin up more VMs than you asked for, then delete unnecessary VMs.
+- This improves provisioning success rates because if even one VM does not provision successfully, the entire deployment is considered "Failed" by Azure Resource Manager. 
+- While this does improve provisioning success rates, it can cause confusing behavior for an application that is not designed to handle VMs disappearing unannounced. 
+
+![](./images/overprovision.jpg)
+
+_Figure 18:  The overprovision property_
+
 ## Using the command line to provision our virtual machine scale set
 
 Before diving into the command line. Let's finish off working with the azuredeploy.parameters.json file, which is where we customize or parameterize the deployment.
@@ -250,12 +260,12 @@ This is the file that is used to pass in parameters, such as the:
 - **vmSku**
 - **ubuntuOSVersion**
 - **vmssName**
-- **instanceCount** (how many VM's to include in the scale set initially)
+- **instanceCount** (how many VMs to include in the scale set initially)
 - etc
 
 ![](./images/image0046.jpg)
 
-_Figure 18:  Customizing the deployment_
+_Figure 19:  Customizing the deployment_
 
 Now we are ready to issue the command to provision that virtual machine scale sets using the Azure cross-platform tooling.
 
@@ -267,7 +277,7 @@ Note below that we are executing the **azure group create** command. It passed t
 
 ![](./images/image0049.jpg)
 
-_Figure 19:  Executing the deployment_
+_Figure 20:  Executing the deployment_
 
 Notice the things that we walk through previously within the template have now been made reality:
 
@@ -278,33 +288,37 @@ Notice the things that we walk through previously within the template have now b
 
 ![](./images/image0052.jpg)
 
-_Figure 20: The infrastructure that was deployed_
+_Figure 21: The infrastructure that was deployed_
 
-If we drill down to the details of the scale set, you will notice that currently it plumbs to the **instance count **that was passed in. As you recall, the **instance count** was 3in the parameters file.
+If we drill down to the details of the scale set, you will notice that currently it plumbs to the **instance count **that was passed in. As you recall, the **instance count** was **3** in the parameters file.
 
 ![](./images/image0055.jpg)
 
-_Figure 21:  Details of the VM scale set_
+_Figure 22:  Details of the VM scale set_
 
 ## Verifying that auto scaling is functioning
 
-What we want to do now is stressed the system and force CPU utilization to rise above 60% for more than five minutes, so that we can see the scaling up of our VM's.
+What we want to do now is stres the system and force CPU utilization to rise above 60% for more than five minutes, so that we can see the scaling up of our VMs.
 
 #### Stress
 
-There is utility called **stress** that makes this easy.
+There is a utility called **stress** that makes this easy.
 
 So we will use the command below to remote and so that we can install this utility.
 
-Because we will need to stress the tool on each individual VM, we will remote into each of our three VM's that are in the scale set.
+Because we will need to stress the tool on each individual VM, we will remote into each of our three VMs that are in the scale set.
 
-There was a little voodoo pick in the right port. For some reason 50001 was not a valid host. So I skipped to 50003 and it seemed to work.
+Which ports work can be determined from listing the VMs or querying the LB NAT rules. On my second deployment note that 50004 ended up being the port to remote into.
+
+![](./images/nat-rules.jpg)
+
+_Figure 23:  Looking at NAT rules to determine available ports_
 
 Once remote did in the next step is to go in and run the stress tool. Remember when you talk about percent CPU utilization you are talking about the average of all the nodes in your cluster, not anyone machine. This makes sense, of course.
 
 ![](./images/image0079.jpg)
 
-_Figure 22:  Remoting in and using the appropriate number_
+_Figure 24:  Remoting in and using the appropriate number_
 
 Well, it turns out that **stress** is not available by default in **Ubuntu**.
 
@@ -312,16 +326,16 @@ So let's install the stress utility.
 
 ###Stressing the VMs in the scale set
 
-- **Step 1 -** SSH into each of the three VM's and the scale set
+- **Step 1 -** SSH into each of the three VMs and the scale set
 - **Step 2 -** Install stress
 - **Step 3 -** Run stress
 - **Step 4 -** Run top
 
 This next section will discuss or explain the upcoming images that follow this narrative.
 
-#### Step 1 of 4 - SSH into each of the three VM's and the scale set
+#### Step 1 of 4 - SSH into each of the three VMs and the scale set
 
-We will need to be logged into each of the VM's and the scale set so that we could install stress and run it.
+We will need to be logged into each of the VMs and the scale set so that we could install stress and run it.
 
 #### Step 2 of 4 - Install stress
 
@@ -349,43 +363,43 @@ top
 
 ![](./images/image0082.jpg)
 
-_Figure 23:  We are SSH'd into each of the VM's and the scale set_
+_Figure 25:  We are SSH'd into each of the VMs and the scale set_
 
 ![](./images/image0085.jpg)
 
-_Figure 24:  Installing Stress (sounds funny)_
+_Figure 26:  Installing Stress (sounds funny)_
 
 ![](./images/image0088.jpg)
 
-_Figure 25:  Remember to install it on all of the VM's and the scale set_
+_Figure 27:  Remember to install it on all of the VMs and the scale set_
 
 ![](./images/image0091.jpg)
 
-_Figure 26:  Verifying %CPU Utilization_
+_Figure 28:  Verifying %CPU Utilization_
 
 **Some key points.**
 
 - Scale out is based on average CPU across the scale set. 
-- You can scale up too (More CPU, Memory, Storage)
-- The whole cycle can take 20 minutes for all the magic to happen (VMs provisioned, de-provisioned, etc)
-- Insights pipeline needs to be initiated (e.g. create storage account, start sending data, initialize Insights engine etc.)
-- After the first scale event, you can expect scale events to take 5-10 minutes depending on timing (5 minute sampling plus time to start VM etc)
+- You can scale up too (More CPU, Memory, Storage).
+- The whole cycle can take 20 minutes for all the magic to happen (VMs provisioned, de-provisioned, etc).
+- Insights pipeline needs to be initiated (e.g. create storage account, start sending data, initialize Insights engine etc.).
+- After the first scale event, you can expect scale events to take 5-10 minutes depending on timing (5 minute sampling plus time to start VM etc).
 
 ![](./images/image0094.jpg)
 
-_Figure 27:  Make sure you wait_
+_Figure 29:  Make sure you wait_
 
 ## Success - VMs in scale set provisioned
 
-This is actually exactly what we were looking for. Notice that two additional VM's got brought online to accommodate and compensate for the massive spike in CPU utilization. If you think about it, three virtual machines running at 80% utilization need to be at 40% minimum, given the sudden and massive spike. So the question becomes what number of additional VM's are needed to bring down the CPU to a reasonable level. I like that Azure brought 2 VM's online, not just one. Feels like a safer but prudent reaction to CPU spikes.
+This is actually exactly what we were looking for. Notice that two additional VMs got brought online to accommodate and compensate for the massive spike in CPU utilization. If you think about it, three virtual machines running at 80% utilization need to be at 40% minimum, given the sudden and massive spike. So the question becomes what number of additional VMs are needed to bring down the CPU to a reasonable level. I like that Azure brought 2 VMs online, not just one. Feels like a safer but prudent reaction to CPU spikes.
 `
 I will conclude this post right here but there is more to talk about. I encourage everybody to go simply do some searching around the web for guidance around Azure scale sets.
 
 ![](./images/image0100.jpg)
 
-_Figure 28:  the moment we have been waiting for_
+_Figure 30:  the moment we have been waiting for_
 
 ## Conclusion
 
-This brief walk-through has taken you from beginning to end, allowing you to see how a scale set is constructed, how to set up some metrics to trigger scale up and scale-down events. This post took you through a detailed walk-through all the way to the point of validating that scale sets work and that additional VM's can be brought online in the event of high CPU utilization across the cluster.
+This brief walk-through has taken you from beginning to end, allowing you to see how a scale set is constructed, how to set up some metrics to trigger scale up and scale-down events. This post took you through a detailed walk-through all the way to the point of validating that scale sets work and that additional VMs can be brought online in the event of high CPU utilization across the cluster.
 
